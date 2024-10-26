@@ -11,7 +11,7 @@
  import javax.swing.JPanel;
  import bbhack.MainMenu;
  import bbhack.rom.ROMPalettes;
- import bbhack.tiles.Tile16;
+ import bbhack.types.Tile16;
  
  
  

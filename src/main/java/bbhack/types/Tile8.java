@@ -1,4 +1,4 @@
- package bbhack.tiles;
+ package bbhack.types;
  
  public class Tile8
  {

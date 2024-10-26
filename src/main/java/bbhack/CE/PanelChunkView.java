@@ -11,7 +11,7 @@
  import javax.swing.JPanel;
  import bbhack.MainMenu;
  import bbhack.rom.ROMPalettes;
- import bbhack.tiles.Tile64;
+ import bbhack.types.Tile64;
  
  
  public class PanelChunkView

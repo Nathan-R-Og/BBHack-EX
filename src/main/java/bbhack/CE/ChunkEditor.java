@@ -32,7 +32,6 @@
    extends JFrame
  {
    public MainMenu main;
-   private ChunkEditor thisRef;
    private static final long serialVersionUID = 1L;
    private JDesktopPane desktop;
    InternalChunkSelectCE internalChunkSelect;
@@ -43,7 +42,6 @@
    public ChunkEditor(MainMenu instance) {
      super("Chunk Editor");
      this.main = instance;
-     this.thisRef = this;
      
      setSize(832, 512);
      setVisible(true);
@@ -148,41 +146,26 @@
  
  
      
-     this.panelPaletteSelect.altCheckbox.addActionListener(
-         new ActionListener() {
-           public void actionPerformed(ActionEvent event) {
-             ChunkEditor.this.panelChunkView.repaint();
-           }
-         });
-     this.panelPaletteSelect.altDropdown.addActionListener(
-         new ActionListener() {
-           public void actionPerformed(ActionEvent event) {
-             ChunkEditor.this.panelChunkView.repaint();
-           }
-         });
+     this.panelPaletteSelect.altCheckbox.addActionListener((ActionEvent event) -> {
+         ChunkEditor.this.panelChunkView.repaint();
+     });
+     this.panelPaletteSelect.altDropdown.addActionListener((ActionEvent event) -> {
+         ChunkEditor.this.panelChunkView.repaint();
+     });
  
- 
-     
-     this.panelOptions.tileset.addActionListener(
-         new ActionListener() {
-           public void actionPerformed(ActionEvent event) {
-             ChunkEditor.this.panelPaletteSelect.altCheckbox.setSelected(false);
-             ChunkEditor.this.selectedTileset1 = ChunkEditor.this.panelOptions.tileset.getSelectedIndex();
-             ChunkEditor.this.panelChunkSelect.repaint();
-             ChunkEditor.this.panelTileSelect.repaint();
-             ChunkEditor.this.panelChunkView.repaint();
-           }
-         });
-     this.panelOptions.palette64.addActionListener(
-         new ActionListener() {
-           public void actionPerformed(ActionEvent event) {
-             ChunkEditor.this.selectedPalette = ChunkEditor.this.panelOptions.palette64.getSelectedIndex();
-             ChunkEditor.this.panelChunkSelect.repaint();
-             ChunkEditor.this.panelTileSelect.repaint();
-             ChunkEditor.this.panelChunkView.repaint();
-           }
-         });
- 
+     this.panelOptions.tileset.addActionListener((ActionEvent event) -> {
+         ChunkEditor.this.panelPaletteSelect.altCheckbox.setSelected(false);
+         ChunkEditor.this.selectedTileset1 = ChunkEditor.this.panelOptions.tileset.getSelectedIndex();
+         ChunkEditor.this.panelChunkSelect.repaint();
+         ChunkEditor.this.panelTileSelect.repaint();
+         ChunkEditor.this.panelChunkView.repaint();
+     });
+     this.panelOptions.palette64.addActionListener((ActionEvent event) -> {
+         ChunkEditor.this.selectedPalette = ChunkEditor.this.panelOptions.palette64.getSelectedIndex();
+         ChunkEditor.this.panelChunkSelect.repaint();
+         ChunkEditor.this.panelTileSelect.repaint();
+         ChunkEditor.this.panelChunkView.repaint();
+     });
      
      this.selectedTileset1 = this.panelOptions.tileset.getSelectedIndex();
      this.selectedPalette = this.panelOptions.palette64.getSelectedIndex();
@@ -190,12 +173,7 @@
      this.panelTileSelect.repaint();
      this.panelChunkView.repaint();
  
- 
- 
-     
      JMenuBar menu = new JMenuBar();
- 
- 
      
      JMenu menuFile = new JMenu("File");
      menu.add(menuFile);
@@ -204,51 +182,31 @@
      menuFile.add(itemExit);
      JMenuItem itemSave = new JMenuItem("Save");
      menuFile.add(itemSave);
-     itemSave.addActionListener(
-         new ActionListener() {
-           public void actionPerformed(ActionEvent event) {
-             ChunkEditor.this.main.gfx.save64();
-             JOptionPane.showMessageDialog(ChunkEditor.this.desktop, "Successfully saved!");
-           }
-         });
+     itemSave.addActionListener((ActionEvent event) -> {
+         ChunkEditor.this.main.gfx.save64();
+         JOptionPane.showMessageDialog(ChunkEditor.this.desktop, "Successfully saved!");
+     });
  
  
- 
-     
      JMenu menuHelp = new JMenu("Help");
      menu.add(menuHelp);
      
      JMenuItem itemShortcuts = new JMenuItem("Keyboard Shortcuts");
      menuHelp.add(itemShortcuts);
-     itemShortcuts.addActionListener(
-         new ActionListener() {
-           public void actionPerformed(ActionEvent event) {
-             String text = "<html><b>RIGHT CLICK:</b> Select (copy) a tile from the chunk editor</html>\n<html><b>1-4:</b> Select sub-palette 1 through 4</html>\n<html><b>INSERT:</b> Place a tile from the alternate tileset (shouldn't need to be used very often)</html>";
- 
- 
-             
-             JOptionPane.showMessageDialog(ChunkEditor.this.thisRef, ChunkEditor.this.main.createScrollingLabel(text, true), "Keyboard Shortcuts", 1);
-           }
-         });
+     itemShortcuts.addActionListener((ActionEvent event) -> {
+         String text = "<html><b>RIGHT CLICK:</b> Select (copy) a tile from the chunk editor</html>\n<html><b>1-4:</b> Select sub-palette 1 through 4</html>\n<html><b>INSERT:</b> Place a tile from the alternate tileset (shouldn't need to be used very often)</html>";
+         JOptionPane.showMessageDialog(ChunkEditor.this, main.createScrollingLabel(text, true), "Keyboard Shortcuts", 1);
+     });
      
      JMenuItem itemAbout = new JMenuItem("About");
      menuHelp.add(itemAbout);
-     itemAbout.addActionListener(
-         new ActionListener() {
-           public void actionPerformed(ActionEvent event) {
-             String text = "<html><center><b>BB Hack v1.0<br/>All-in-one Earthbound Zero hacking tool<br/>Written by uyuyuy99</b><br/><br/><br/>If you find any bugs, want to request features, or want to help me uncover some data from the EB0 ROM, just contact me:<br/>PM on starmen.net (uyuyuy99)<br/>PM on smwcentral.net (uyuyuy99)<br/>Making a post on the forum thread<br/>Email (uyuyuy99@gmail.com)</center><br/><br/><h2>Changelog</h2><u>v1.0</u> (September 6, 2012)<ul><li>Initial release! Includes map editor and chunk editor.</li></u></u></html>";
-             JOptionPane.showMessageDialog(ChunkEditor.this.thisRef, ChunkEditor.this.main.createScrollingLabel(text, false), "About", 1);
-           }
-         });
+     itemAbout.addActionListener((ActionEvent event) -> {
+         JOptionPane.showMessageDialog(ChunkEditor.this, main.createScrollingLabel(Info.aboutText, false), "About", 1);
+     });
  
  
-     
      setJMenuBar(menu);
  
- 
- 
- 
-     
      Image windowIcon1 = (new ImageIcon(Info.class.getResource("/icons/main1.png"))).getImage();
      Image windowIcon2 = (new ImageIcon(Info.class.getResource("/icons/main2.png"))).getImage();
      ArrayList<Image> windowIcons = new ArrayList<Image>();
@@ -260,33 +218,32 @@
            public void windowClosing(WindowEvent event) {
              ChunkEditor.this.exitSave();
            }
-         });
+     });
+     
    }
+   
    PanelChunkSelectCE panelChunkSelect; PanelChunkView panelChunkView; PanelTileSelectCE panelTileSelect; PanelOptionsCE panelOptions; PanelPaletteSelectCE panelPaletteSelect; public int selectedPalette; public int selectedTileset1; public int selectedTileset2; public boolean useAlternateTileset;
    private void exitSave() {
      final JOptionPane optionPane = new JOptionPane("<html>Save chunk data to ROM?<br/><br/><i>(Note: choosing 'no' will NOT<br/>discard your changes)</i></html>", 
          2, 0);
-     final JDialog dialog = new JDialog(this.thisRef, "Save", true);
+     final JDialog dialog = new JDialog(this, "Save", true);
      dialog.setContentPane(optionPane);
      dialog.setDefaultCloseOperation(0);
      dialog.setResizable(false);
      
-     optionPane.addPropertyChangeListener(
-         new PropertyChangeListener() {
-           public void propertyChange(PropertyChangeEvent event) {
-             String prop = event.getPropertyName();
-             if (dialog.isVisible() && event.getSource() == optionPane && prop.equals("value")) {
-               if (((Integer)optionPane.getValue()).intValue() == 0) {
+     optionPane.addPropertyChangeListener((PropertyChangeEvent event) -> {
+         String prop = event.getPropertyName();
+         if (dialog.isVisible() && event.getSource() == optionPane && prop.equals("value")) {
+             if (((Integer)optionPane.getValue()).intValue() == 0) {
                  ChunkEditor.this.main.gfx.save64();
-               }
-               ChunkEditor.this.main.repaintAll();
-               dialog.dispose();
-               ChunkEditor.this.dispose();
-             } 
-           }
-         });
+             }
+             ChunkEditor.this.main.repaintAll();
+             dialog.dispose();
+             ChunkEditor.this.dispose();
+         }
+     });
      dialog.pack();
-     dialog.setLocationRelativeTo(this.thisRef);
+     dialog.setLocationRelativeTo(this);
      dialog.setVisible(true);
    }
    

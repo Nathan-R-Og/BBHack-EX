@@ -1,4 +1,4 @@
- package bbhack.tiles;
+ package bbhack.types;
  
  import java.util.ArrayList;
  

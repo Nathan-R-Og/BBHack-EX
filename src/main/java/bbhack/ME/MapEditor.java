@@ -30,14 +30,17 @@
    extends JFrame
  {
    public MainMenu main;
-   private MapEditor thisRef;
    private static final long serialVersionUID = 1L;
    private JDesktopPane desktop;
+   InternalMap internalMap;
+   InternalChunkSelectME internalChunkSelect;
+   PanelMap panelMap;
+   PanelChunkSelectME panelChunkSelect;
+   PanelToolbarME panelToolbar;
    
    public MapEditor(MainMenu instance) {
      super("Map Editor");
      this.main = instance;
-     this.thisRef = this;
      
      setSize(1024, 576);
      setVisible(true);
@@ -105,37 +108,24 @@
          });
  
  
- 
- 
      
      JMenuBar menu = new JMenuBar();
  
- 
-     
      JMenu menuFile = new JMenu("File");
      menu.add(menuFile);
      
      JMenuItem itemSave = new JMenuItem("Save");
      menuFile.add(itemSave);
-     itemSave.addActionListener(
-         new ActionListener() {
-           public void actionPerformed(ActionEvent event) {
-             MapEditor.this.main.map.save();
-             JOptionPane.showMessageDialog(MapEditor.this.desktop, "Successfully saved!");
-           }
-         });
+     itemSave.addActionListener((ActionEvent event) -> {
+         MapEditor.this.main.map.save();
+         JOptionPane.showMessageDialog(MapEditor.this.desktop, "Successfully saved!");
+     });
      
      JMenuItem itemExit = new JMenuItem("Exit");
      menuFile.add(itemExit);
-     itemExit.addActionListener(
-         new ActionListener() {
-           public void actionPerformed(ActionEvent event) {
-             MapEditor.this.exitSave();
-           }
-         });
- 
- 
- 
+     itemExit.addActionListener((ActionEvent event) -> {
+         MapEditor.this.exitSave();
+     });
      
      JMenu menuView = new JMenu("View");
      menu.add(menuView);
@@ -143,62 +133,48 @@
      final JCheckBoxMenuItem itemViewGridChunk = new JCheckBoxMenuItem("Chunk Grid");
      menuView.add(itemViewGridChunk);
      itemViewGridChunk.setSelected(true);
-     itemViewGridChunk.addActionListener(
-         new ActionListener() {
-           public void actionPerformed(ActionEvent event) {
-             MapEditor.this.panelMap.viewGridChunk = itemViewGridChunk.isSelected();
-             MapEditor.this.panelMap.repaint();
-           }
-         });
+     itemViewGridChunk.addActionListener((ActionEvent event) -> {
+         MapEditor.this.panelMap.viewGridChunk = itemViewGridChunk.isSelected();
+         MapEditor.this.panelMap.repaint();
+     });
      
      final JCheckBoxMenuItem itemViewGridSector = new JCheckBoxMenuItem("Sector Grid");
      menuView.add(itemViewGridSector);
      itemViewGridSector.setSelected(false);
-     itemViewGridSector.addActionListener(
-         new ActionListener() {
-           public void actionPerformed(ActionEvent event) {
-             MapEditor.this.panelMap.viewGridSector = itemViewGridSector.isSelected();
-             MapEditor.this.panelMap.repaint();
-           }
-         });
- 
- 
- 
+     itemViewGridSector.addActionListener((ActionEvent event) -> {
+         MapEditor.this.panelMap.viewGridSector = itemViewGridSector.isSelected();
+         MapEditor.this.panelMap.repaint();
+     });
      
      JMenu menuHelp = new JMenu("Help");
      menu.add(menuHelp);
      
      JMenuItem itemShortcuts = new JMenuItem("Keyboard Shortcuts");
      menuHelp.add(itemShortcuts);
-     itemShortcuts.addActionListener(
-         new ActionListener() {
-           public void actionPerformed(ActionEvent event) {
-             String text = "<html><b>RIGHT CLICK:</b> Select (copy) a chunk from the map</html>\n<html><b>CTRL+LEFT CLICK:</b> Select tileset/palette from map without placing tile</html>\n<html><b>SHIFT+LEFT CLICK:</b> Open chunk in chunk editor from the map editor</html>";
- 
- 
-             
-             JOptionPane.showMessageDialog(MapEditor.this.thisRef, MapEditor.this.main.createScrollingLabel(text, true), "Keyboard Shortcuts", 1);
-           }
-         });
+     itemShortcuts.addActionListener((ActionEvent event) -> {
+         String text = "<html>"
+                 + "<b>RIGHT CLICK:</b> Select (copy) a chunk from the map"
+                 + "</html>"
+                 + "\n"
+                 + "<html>"
+                 + "<b>CTRL+LEFT CLICK:</b> Select tileset/palette from map without placing tile</html>"
+                 + "\n"
+                 + "<html>"
+                 + "<b>SHIFT+LEFT CLICK:</b> Open chunk in chunk editor from the map editor"
+                 + "</html>";
+         JOptionPane.showMessageDialog(MapEditor.this, main.createScrollingLabel(text, true), "Keyboard Shortcuts", 1);
+     });
      
      JMenuItem itemAbout = new JMenuItem("About");
      menuHelp.add(itemAbout);
-     itemAbout.addActionListener(
-         new ActionListener() {
-           public void actionPerformed(ActionEvent event) {
-             String text = "<html><center><b>BB Hack v1.0<br/>All-in-one Earthbound Zero hacking tool<br/>Written by uyuyuy99</b><br/><br/><br/>If you find any bugs, want to request features, or want to help me uncover some data from the EB0 ROM, just contact me:<br/>PM on starmen.net (uyuyuy99)<br/>PM on smwcentral.net (uyuyuy99)<br/>Making a post on the forum thread<br/>Email (uyuyuy99@gmail.com)</center><br/><br/><h2>Changelog</h2><u>v1.0</u> (September 6, 2012)<ul><li>Initial release! Includes map editor and chunk editor.</li></u></u></html>";
-             JOptionPane.showMessageDialog(MapEditor.this.thisRef, MapEditor.this.main.createScrollingLabel(text, false), "About", 1);
-           }
-         });
+     itemAbout.addActionListener((ActionEvent event) -> {
+         JOptionPane.showMessageDialog(MapEditor.this, main.createScrollingLabel(Info.aboutText, false), "About", 1);
+     });
  
  
      
      setJMenuBar(menu);
  
- 
- 
- 
-     
      Image windowIcon1 = (new ImageIcon(Info.class.getResource("/icons/main1.png"))).getImage();
      Image windowIcon2 = (new ImageIcon(Info.class.getResource("/icons/main2.png"))).getImage();
      ArrayList<Image> windowIcons = new ArrayList<Image>();
@@ -212,11 +188,15 @@
            }
          });
    }
-   InternalMap internalMap; InternalChunkSelectME internalChunkSelect; PanelMap panelMap; PanelChunkSelectME panelChunkSelect; PanelToolbarME panelToolbar;
    private void exitSave() {
-     final JOptionPane optionPane = new JOptionPane("<html>Save map data to ROM?<br/><br/><i>(Note: choosing 'no' will NOT<br/>discard your changes)</i></html>", 
-         2, 0);
-     final JDialog dialog = new JDialog(this.thisRef, "Save", true);
+     final JOptionPane optionPane = new JOptionPane("<html>"
+             + "Save map data to ROM?<br/>"
+             + "<br/>"
+             + "<i>(Note: choosing 'no' will NOT<br/>"
+             + "discard your changes)</i>"
+             + "</html>", 
+                  2, 0);
+     final JDialog dialog = new JDialog(this, "Save", true);
      dialog.setContentPane(optionPane);
      dialog.setDefaultCloseOperation(0);
      dialog.setResizable(false);
@@ -235,7 +215,7 @@
            }
          });
      dialog.pack();
-     dialog.setLocationRelativeTo(this.thisRef);
+     dialog.setLocationRelativeTo(this);
      dialog.setVisible(true);
    }
    

@@ -16,35 +16,32 @@
    public int[] sectorTileset2;
    
    public ROMMapSectors(MainMenu instance) {
-     this.main = instance;
+     main = instance;
  
-     
-     this.mapTiles = new int[0x10000];
-     this.mapTileset = new boolean[0x10000];
-     this.mapEvent = new boolean[0x10000];
+     mapTiles = new int[0x10000];
+     mapTileset = new boolean[0x10000];
+     mapEvent = new boolean[0x10000];
  
-     
-     this.sectorPalette = new int[0x1000];
-     this.sectorArea = new int[0x1000];
-     this.sectorTileset1 = new int[0x1000];
-     this.sectorTileset2 = new int[0x1000];
+     sectorPalette = new int[0x1000];
+     sectorArea = new int[0x1000];
+     sectorTileset1 = new int[0x1000];
+     sectorTileset2 = new int[0x1000];
  
-     
      int[] banksMap = { 0x4010, 0x8010, 0xC010, 0x10010, 0x14010, 0x18010, 0x1C010 };
      int curBank = 0; byte b; int i, arrayOfInt1[];
      for (i = (arrayOfInt1 = banksMap).length, b = 0; b < i; ) { int offset = arrayOfInt1[b];
        for (int k = 0; k < 0x2000; k++) {
          int tileOffs = offset + k;
          int arrayOffs = curBank * 0x2000 + k;
-         int currentByte = this.main.rom.get(tileOffs);
+         int currentByte = main.rom.get(tileOffs);
          
-         this.mapTiles[arrayOffs] = currentByte % 0x40;
+         mapTiles[arrayOffs] = currentByte % 0x40;
          
          int upper2 = currentByte / 0x40;
-         if (upper2 % 2 == 1) { this.mapTileset[arrayOffs] = true; }
-         else { this.mapTileset[arrayOffs] = false; }
-          if (upper2 > 1) { this.mapEvent[arrayOffs] = true; }
-         else { this.mapEvent[arrayOffs] = false; }
+         if (upper2 % 2 == 1) { mapTileset[arrayOffs] = true; }
+         else { mapTileset[arrayOffs] = false; }
+          if (upper2 > 1) { mapEvent[arrayOffs] = true; }
+         else { mapEvent[arrayOffs] = false; }
        
        }  curBank++;
        
@@ -53,15 +50,14 @@
      int[] banksSector = { 0x7810, 0xB810, 0xF810, 0x13810, 0x17810, 0x1B810, 0x1F810 };
      curBank = 0; int[] arrayOfInt2; i = 0;
      for (int j = (arrayOfInt2 = banksSector).length; i < j; ) { int offset = arrayOfInt2[i];
-       for (int k = 0; k < 512; k++) {
+       for (int k = 0; k < 0x200; k++) {
          int tileOffs = offset + k * 4;
-         int arrayOffs = curBank * 512 + k;
- 
+         int arrayOffs = curBank * 0x200 + k;
          
-         this.sectorPalette[arrayOffs] = this.main.rom.get(tileOffs) % 0x40;
-         this.sectorArea[arrayOffs] = this.main.rom.get(tileOffs + 1) % 0x40;
-         this.sectorTileset1[arrayOffs] = this.main.rom.get(tileOffs + 2) % 0x40;
-         this.sectorTileset2[arrayOffs] = this.main.rom.get(tileOffs + 3) % 0x40;
+         sectorPalette[arrayOffs] = Byte.toUnsignedInt(main.rom.get(tileOffs)) % 0x40;
+         sectorArea[arrayOffs] = Byte.toUnsignedInt(main.rom.get(tileOffs+1)) % 0x40;
+         sectorTileset1[arrayOffs] = Byte.toUnsignedInt(main.rom.get(tileOffs+2)) % 0x40;
+         sectorTileset2[arrayOffs] = Byte.toUnsignedInt(main.rom.get(tileOffs+3)) % 0x40;
        } 
        curBank++;
        i++; }
@@ -72,14 +68,14 @@
      int[] banksSector = { 0x7810, 0xB810, 0xF810, 0x13810, 0x17810, 0x1B810, 0x1F810 };
      int curBank = 0; byte b; int i, arrayOfInt1[];
      for (i = (arrayOfInt1 = banksSector).length, b = 0; b < i; ) { int offset = arrayOfInt1[b];
-       for (int k = 0; k < 512; k++) {
+       for (int k = 0; k < 0x200; k++) {
          int tileOffs = offset + k * 4;
-         int arrayOffs = curBank * 512 + k;
+         int arrayOffs = curBank * 0x200 + k;
          
-         this.main.rom.write(tileOffs, (short)(this.main.rom.get(tileOffs) / 64 * 64 + this.sectorPalette[arrayOffs]));
-         this.main.rom.write(tileOffs + 1, (short)(this.main.rom.get(tileOffs + 1) / 64 * 64 + this.sectorArea[arrayOffs]));
-         this.main.rom.write(tileOffs + 2, (short)(this.main.rom.get(tileOffs + 2) / 64 * 64 + this.sectorTileset1[arrayOffs]));
-         this.main.rom.write(tileOffs + 3, (short)(this.main.rom.get(tileOffs + 3) / 64 * 64 + this.sectorTileset2[arrayOffs]));
+         main.rom.write(tileOffs, (byte)(Byte.toUnsignedInt(main.rom.get(tileOffs)) / 0x40 * 0x40 + sectorPalette[arrayOffs]));
+         main.rom.write(tileOffs + 1, (byte)(Byte.toUnsignedInt(main.rom.get(tileOffs + 1)) / 0x40 * 0x40 + sectorArea[arrayOffs]));
+         main.rom.write(tileOffs + 2, (byte)(Byte.toUnsignedInt(main.rom.get(tileOffs + 2)) / 0x40 * 0x40 + sectorTileset1[arrayOffs]));
+         main.rom.write(tileOffs + 3, (byte)(Byte.toUnsignedInt(main.rom.get(tileOffs + 3)) / 0x40 * 0x40 + sectorTileset2[arrayOffs]));
        } 
        curBank++;
        
@@ -88,55 +84,55 @@
      int[] banksMap = { 0x4010, 0x8010, 0xC010, 0x10010, 0x14010, 0x18010, 0x1C010 };
      curBank = 0; int[] arrayOfInt2; i = 0;
      for (int j = (arrayOfInt2 = banksMap).length; i < j; ) { int offset = arrayOfInt2[i];
-       for (int k = 0; k < 8192; k++) {
+       for (int k = 0; k < 0x2000; k++) {
          int tileOffs = offset + k;
-         int arrayOffs = curBank * 8192 + k;
-         int curByte = this.mapTiles[arrayOffs];
+         int arrayOffs = curBank * 0x2000 + k;
+         int curByte = mapTiles[arrayOffs];
          
-         boolean curTileset = this.mapTileset[arrayOffs];
-         boolean curEvent = this.mapEvent[arrayOffs];
+         boolean curTileset = mapTileset[arrayOffs];
+         boolean curEvent = mapEvent[arrayOffs];
  
          
          if (curTileset)
-           curByte += 64; 
+           curByte += 0x40; 
          if (curEvent) {
-           curByte += 128;
+           curByte += 0x80;
          }
          
-         this.main.rom.write(tileOffs, (short)curByte);
+         main.rom.write(tileOffs, (byte) curByte);
        } 
        curBank++;
        i++; }
      
-     this.main.rom.saveMap();
+     main.rom.saveMap();
    }
    
    public int mapTilesGet(int x, int y) {
-     return this.mapTiles[y * 256 + x];
+     return mapTiles[y * 0x100 + x];
    }
    
    public boolean mapTilesetGet(int x, int y) {
-     return this.mapTileset[y * 256 + x];
+     return mapTileset[y * 0x100 + x];
    }
    
    public boolean mapEventGet(int x, int y) {
-     return this.mapEvent[y * 256 + x];
+     return mapEvent[y * 0x100 + x];
    }
    
    public int sectorPaletteGet(int x, int y) {
-     return this.sectorPalette[y * 64 + x];
+     return sectorPalette[y * 0x40 + x];
    }
    
    public int sectorAreaGet(int x, int y) {
-     return this.sectorArea[y * 64 + x];
+     return sectorArea[y * 0x40 + x];
    }
    
    public int sectorTileset1Get(int x, int y) {
-     return this.sectorTileset1[y * 64 + x];
+     return sectorTileset1[y * 0x40 + x];
    }
    
    public int sectorTileset2Get(int x, int y) {
-     return this.sectorTileset2[y * 64 + x];
+     return sectorTileset2[y * 0x40 + x];
    }
  }
 

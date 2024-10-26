@@ -1,5 +1,10 @@
  package bbhack;
  
+ /* 
+ Class for metadata related stuff.
+ 
+ */
+ 
  public class Info
  {
    public static final String[] tilesetNames = new String[] { 
@@ -34,9 +39,36 @@
        "[28] Railroad", 
        "[29] Mt. Itoi 2", 
        "[30] Trashed Lab", 
-       "[31] Test Tubes" };
-   public static final String version = "1.0";
-   public static final String aboutMessage = "<html><center><b>BB Hack v1.0<br/>All-in-one Earthbound Zero hacking tool<br/>Written by uyuyuy99</b><br/><br/><br/>If you find any bugs, want to request features, or want to help me uncover some data from the EB0 ROM, just contact me:<br/>PM on starmen.net (uyuyuy99)<br/>PM on smwcentral.net (uyuyuy99)<br/>Making a post on the forum thread<br/>Email (uyuyuy99@gmail.com)</center><br/><br/><h2>Changelog</h2><u>v1.0</u> (September 6, 2012)<ul><li>Initial release! Includes map editor and chunk editor.</li></u></u></html>";
+       "[31] Test Tubes"
+   };
+  public static final String aboutText = "<html>"
+                + "<center><b>BB Hack v1.0<br/>"
+                + "All-in-one Earthbound Zero hacking tool<br/>"
+                + "Written by uyuyuy99<br/>"
+                + "Decompiled and made moddable by Nathan R.</b><br/>"
+                + "If you find any bugs, want to request features, or want to help me "
+                + "uncover some data from the EB0 ROM, just contact me:<br/>"
+                + "PM on starmen.net (uyuyuy99)<br/>"
+                + "PM on smwcentral.net (uyuyuy99)<br/>"
+                + "Making a post on the forum thread<br/>"
+                + "Email (uyuyuy99@gmail.com)</center><br/>"
+                + "<br/>"
+                + "<h2>Changelog</h2>"
+                + "<u>v1.0</u> (September 6, 2012)"
+                + "<ul><li>Initial release! Includes map editor and chunk editor.</li></ul>"
+                + "<u>v1.1</u> (October 25, 2024)"
+                + "<ul><li>Returnal. </li>"
+                + "<li>Cleanup. A lot.</li>"
+                + "<li>Sped up Save and Load times. No more waiting eons for results!</li>"
+                + "<li>Added in Map Sector Area editing in the Map Editor.</li>"
+                + "<li>Added proper type size support (Java hates unsigned types!)</li>"
+                + "<li>WIP Battle editing.</li>"
+                + "<li>WIP Object viewing.</li>"
+                + "<li>Object splitting. Should allow for intensive object editing if I can get it to save.</li>"
+                + "</ul>"
+                + "</html>";
+
+
  }
 
 
